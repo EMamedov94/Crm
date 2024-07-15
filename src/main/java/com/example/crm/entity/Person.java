@@ -1,6 +1,6 @@
 package com.example.crm.entity;
 
-import com.example.crm.role.Document;
+import com.example.crm.roles.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;

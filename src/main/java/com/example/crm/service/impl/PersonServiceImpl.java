@@ -1,8 +1,6 @@
 package com.example.crm.service.impl;
 
 import com.example.crm.entity.Person;
-import com.example.crm.repository.AddressRepository;
-import com.example.crm.repository.PassportRepository;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,12 @@ public class PersonServiceImpl implements PersonService {
     // Find person by Passport number
     @Override
     public Person findPersonByPassportNumber(String passportNumber) {
-        return personRepository.findByPassportPassportNumber(passportNumber);
+        Person personDb = personRepository.findByPassportPassportNumber(passportNumber);
+
+        if (personDb == null) {
+            throw new RuntimeException("Ничего не найдено");
+        }
+        return personDb;
     }
 
     // Find person by Phone number

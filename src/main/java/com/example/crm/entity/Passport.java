@@ -27,7 +27,7 @@ public class Passport {
     @Column(nullable = false)
     private String issuingAuthority;
 
-    @OneToOne
-    @JsonIgnore
+    @OneToOne()
+    @JoinColumn(name = "person_id")
     private Person person;
 }

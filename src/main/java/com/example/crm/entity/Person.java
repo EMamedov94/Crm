@@ -1,11 +1,14 @@
 package com.example.crm.entity;
 
-import com.example.crm.roles.Document;
+import com.example.crm.entity.products.Deposit;
+import com.example.crm.enums.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @RequiredArgsConstructor
@@ -33,11 +36,13 @@ public class Person {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "passport_id")
-    @JsonProperty("passport")
     private Passport passport;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     @JsonProperty("address")
     private Address address;
+
+    @OneToMany(mappedBy = "depositHolder")
+    private Set<Deposit> deposits;
 }

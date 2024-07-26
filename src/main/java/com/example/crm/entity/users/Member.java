@@ -1,6 +1,6 @@
 package com.example.crm.entity.users;
 
-import com.example.crm.roles.Role;
+import com.example.crm.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
+@Builder
 public class Member implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,9 @@ public class Member implements UserDetails {
     private Role role;
     @Transient
     private String token;
+
+    public Member() {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

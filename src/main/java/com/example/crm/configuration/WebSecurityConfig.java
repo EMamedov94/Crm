@@ -41,21 +41,17 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/login",
-                                "/logout").permitAll()
+                                "/logout",
+                                "/registrationNewMember").permitAll()
+                        .requestMatchers(
+                                "/addNewPerson"
+                        ).hasRole("USER")
                         .anyRequest().authenticated()
                 )
+                .sessionManagement(sessionAuthenticationStrategy ->
+                        sessionAuthenticationStrategy.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    // Session filter
-    @Bean
-    public SecurityFilterChain sessionFilterChain(HttpSecurity http) throws  Exception {
-        http
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                );
         return http.build();
     }
 
@@ -65,7 +61,6 @@ public class WebSecurityConfig {
         http
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
-                        .permitAll()
                 )
                 .logout(logout -> logout
                         .invalidateHttpSession(true)

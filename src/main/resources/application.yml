@@ -1,0 +1,18 @@
+spring:
+  #SQL config
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  session:
+    jdbc:
+      initialize-schema: always
+
+  # Application
+  application:
+    name: Crm

@@ -15,6 +15,7 @@ public class PersonServiceImpl implements PersonService {
     // Add new person
     @Override
     public Person addNewPerson(Person person) {
+        person.getPassport().setPerson(person);
         return personRepository.save(person);
     }
 

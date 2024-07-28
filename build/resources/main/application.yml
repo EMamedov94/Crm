@@ -9,6 +9,9 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+  session:
+    jdbc:
+      initialize-schema: always
 
   # Application
   application:

@@ -19,6 +19,7 @@ public class PersonController {
     private final PersonService personService;
     private final ValidationPerson validationPerson;
 
+
     // Add new person
     @PostMapping("/addNewPerson")
     @PreAuthorize("isAuthenticated()")

@@ -44,7 +44,8 @@ public class WebSecurityConfig {
                                 "/logout",
                                 "/registrationNewMember").permitAll()
                         .requestMatchers(
-                                "/addNewPerson"
+                                "/addNewPerson/",
+                                "findPersonByPassportNumber/"
                         ).hasRole("USER")
                         .anyRequest().authenticated()
                 )

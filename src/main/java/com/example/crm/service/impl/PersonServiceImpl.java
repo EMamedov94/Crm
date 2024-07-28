@@ -1,9 +1,12 @@
 package com.example.crm.service.impl;
 
+import com.example.crm.entity.Passport;
 import com.example.crm.entity.Person;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.PersonService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,12 +23,16 @@ public class PersonServiceImpl implements PersonService {
 
     // Find person by Passport number
     @Override
-    public Person findPersonByPassportNumber(String passportNumber) {
-        Person personDb = personRepository.findByPassportPassportNumber(passportNumber);
+    @Transactional
+    public Person findPersonByPassportNumber(Passport passportNumber) {
+        Person personDb = personRepository.findByPassportPassportNumber(passportNumber.getPassportNumber());
 
         if (personDb == null) {
             throw new RuntimeException("Ничего не найдено");
         }
+
+        Hibernate.initialize(personDb.getDeposits());
+
         return personDb;
     }
 

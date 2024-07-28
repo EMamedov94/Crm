@@ -2,8 +2,10 @@ package com.example.crm.entity;
 
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Document;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -36,6 +38,7 @@ public class Person {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "passport_id")
+    @JsonManagedReference
     private Passport passport;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -17,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
-    private final PersonRepository personRepository;
 
     // Открытие нового вклада
     @Override

@@ -1,5 +1,6 @@
 package com.example.crm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,5 +30,6 @@ public class Passport {
 
     @OneToOne()
     @JoinColumn(name = "person_id")
+    @JsonBackReference
     private Person person;
 }

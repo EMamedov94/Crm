@@ -1,6 +1,7 @@
 package com.example.crm.controllers;
 
 
+import com.example.crm.entity.Passport;
 import com.example.crm.entity.Person;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.service.PersonService;
@@ -51,9 +52,9 @@ public class PersonController {
     }
 
     // Find person by passport number
-    @GetMapping("/findPersonByPassportNumber/{passportNumber}")
+    @GetMapping("/findPersonByPassportNumber")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPassportNumber(@PathVariable String passportNumber,
+    public ResponseEntity<Object> getPersonByPassportNumber(@RequestBody Passport passportNumber,
                                                             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity
                 .status(HttpStatus.OK)

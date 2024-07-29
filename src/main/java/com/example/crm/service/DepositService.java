@@ -5,5 +5,5 @@ import com.example.crm.entity.products.Deposit;
 
 public interface DepositService {
     Deposit openNewDeposit(DepositDto deposit);
-    Deposit closeDeposit(Deposit deposit);
+    Deposit closeDeposit(DepositDto depositDto);
 }

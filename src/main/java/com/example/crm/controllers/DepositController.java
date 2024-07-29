@@ -23,4 +23,12 @@ public class DepositController {
                 .status(HttpStatus.CREATED)
                 .body(depositService.openNewDeposit(depositDto));
     }
+
+    @PostMapping("/closeDeposit")
+    public ResponseEntity<Object> closeDeposit(@RequestBody DepositDto depositDto,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(depositService.closeDeposit(depositDto));
+    }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class DepositDto {
+    private Long id;
     private Double amount;
     private Double interestRate;
     @Enumerated(EnumType.STRING)

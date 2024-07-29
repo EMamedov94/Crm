@@ -1,31 +1,25 @@
 package com.example.crm.utils;
 
 import com.example.crm.entity.products.Deposit;
-import com.example.crm.enums.Status;
-import com.example.crm.repository.DepositRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @RequiredArgsConstructor
 public class DateUtils {
 
-    private final DepositRepository depositRepository;
-
-    public static Date calculateEndDate(Date startDate, Integer termInDays) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(startDate);
-        calendar.add(Calendar.DAY_OF_YEAR, termInDays);
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        return calendar.getTime();
+    public static LocalDateTime calculateEndDate(LocalDateTime startDate, Integer termInDays) {
+        LocalDateTime endDateTime = startDate.plusDays(termInDays);
+        endDateTime.with(LocalTime.MIDNIGHT);
+        return endDateTime;
     }
+
+//    public static Double calculateInterest(Deposit deposit) {
+//        LocalDateTime currentDate = LocalDateTime.now();
+//
+//        if (currentDate.isAfter(deposit.getEndDate())) {
+//
+//        }
+//    }
 }

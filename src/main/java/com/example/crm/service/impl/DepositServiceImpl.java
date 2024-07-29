@@ -15,6 +15,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,8 +35,8 @@ public class DepositServiceImpl implements DepositService {
 
         validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
 
-        Date startDate = new Date();
-        Date endDate = DateUtils.calculateEndDate(startDate, depositDto.getDepositTermDays());
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = DateUtils.calculateEndDate(startDate, depositDto.getDepositTermDays());
 
         Deposit newDeposit = Deposit.builder()
                 .amount(depositDto.getAmount())
@@ -44,8 +45,8 @@ public class DepositServiceImpl implements DepositService {
                 .depositNumber(UUID.randomUUID().toString())
                 .depositTermDays(depositDto.getDepositTermDays())
                 .status(Status.ACTIVE)
-                .startDate(startDate)
-                .endDate(endDate)
+//                .startDate(startDate)
+//                .endDate(endDate)
                 .depositHolder(depositHolder)
                 .build();
 
@@ -54,7 +55,12 @@ public class DepositServiceImpl implements DepositService {
 
     // Закрытие вклада
     @Override
-    public Deposit closeDeposit(Deposit deposit) {
-        return null;
+    public Deposit closeDeposit(DepositDto depositDto) {
+        Deposit depositDb = depositRepository.findById(depositDto.getId())
+                .orElseThrow(() -> new RuntimeException("Депозит не найден"));
+
+        depositDb.setStatus(Status.CLOSED);
+
+        return depositRepository.save(depositDb);
     }
 }

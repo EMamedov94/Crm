@@ -1,12 +1,17 @@
 package com.example.crm.service.impl;
 
+import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
 import com.example.crm.repository.DepositRepository;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.DepositService;
+import com.example.crm.service.ValidationDeposit;
+import com.example.crm.utils.DateUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +22,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
+    private final PersonRepository personRepository;
+    private final ValidationDeposit validationDeposit;
 
     // Открытие нового вклада
     @Override
-    public Deposit openNewDeposit(Deposit deposit) {
+    @Transactional
+    public Deposit openNewDeposit(DepositDto depositDto) {
+        Person depositHolder = personRepository.findById(depositDto.getClientId())
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+
+        validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
+
+        Date startDate = new Date();
+        Date endDate = DateUtils.calculateEndDate(startDate, depositDto.getDepositTermDays());
 
         Deposit newDeposit = Deposit.builder()
-                .amount(deposit.getAmount())
-                .interestRate(deposit.getInterestRate())
-                .currency(deposit.getCurrency())
+                .amount(depositDto.getAmount())
+                .interestRate(depositDto.getInterestRate())
+                .currency(depositDto.getCurrency())
                 .depositNumber(UUID.randomUUID().toString())
+                .depositTermDays(depositDto.getDepositTermDays())
                 .status(Status.ACTIVE)
-                .startDate(new Date())
+                .startDate(startDate)
+                .endDate(endDate)
+                .depositHolder(depositHolder)
                 .build();
 
         return depositRepository.save(newDeposit);

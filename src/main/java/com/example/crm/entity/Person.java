@@ -5,7 +5,6 @@ import com.example.crm.enums.Document;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -32,6 +31,7 @@ public class Person {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+    private Double balance;
 
     @Enumerated(EnumType.STRING)
     private Document document;
@@ -47,5 +47,6 @@ public class Person {
     private Address address;
 
     @OneToMany(mappedBy = "depositHolder")
+    @JsonManagedReference
     private Set<Deposit> deposits;
 }

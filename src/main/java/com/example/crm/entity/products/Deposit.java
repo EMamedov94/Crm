@@ -3,6 +3,7 @@ package com.example.crm.entity.products;
 import com.example.crm.entity.Person;
 import com.example.crm.enums.Currency;
 import com.example.crm.enums.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,10 +34,12 @@ public class Deposit {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+    private Integer depositTermDays;
 
     private Date startDate;
     private Date endDate;
 
     @ManyToOne
+    @JsonBackReference
     private Person depositHolder;
 }

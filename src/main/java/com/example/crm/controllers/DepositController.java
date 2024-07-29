@@ -1,6 +1,6 @@
 package com.example.crm.controllers;
 
-import com.example.crm.entity.products.Deposit;
+import com.example.crm.dto.DepositDto;
 import com.example.crm.service.DepositService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,10 +17,10 @@ public class DepositController {
     private final DepositService depositService;
 
     @PostMapping("/openNewDeposit")
-    public ResponseEntity<Object> openNewDeposit(@RequestBody Deposit deposit,
+    public ResponseEntity<Object> openNewDeposit(@RequestBody DepositDto depositDto,
                                                  @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(depositService.openNewDeposit(deposit));
+                .body(depositService.openNewDeposit(depositDto));
     }
 }

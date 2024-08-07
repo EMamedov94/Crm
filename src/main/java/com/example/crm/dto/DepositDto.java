@@ -5,6 +5,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class DepositDto {
     private Long id;
@@ -14,4 +16,5 @@ public class DepositDto {
     private Currency currency;
     private Integer depositTermDays;
     private Long clientId;
+    private LocalDateTime endDate;
 }

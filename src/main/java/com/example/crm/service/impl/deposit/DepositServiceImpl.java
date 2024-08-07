@@ -30,11 +30,14 @@ public class DepositServiceImpl implements DepositService {
         Person depositHolder = personRepository.findById(depositDto.getClientId())
                 .orElseThrow(() -> new RuntimeException("Client not found"));
 
+        // Проверить баланс клиента
         validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
 
+        // Определить дату начала и окончания вклада
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = depositUtils.calculateEndDate(startDate, depositDto.getDepositTermDays());
 
+        // Создать новый вклад
         Deposit newDeposit = Deposit.builder()
                 .amount(depositDto.getAmount())
                 .interestRate(depositDto.getInterestRate())
@@ -47,12 +50,18 @@ public class DepositServiceImpl implements DepositService {
                 .depositHolder(depositHolder)
                 .build();
 
+        // Обновить баланс клиента
+        depositHolder.setBalance(depositHolder.getBalance() - depositDto.getAmount());
+        personRepository.save(depositHolder);
+
         return depositRepository.save(newDeposit);
     }
 
     // Закрытие вклада
     @Override
     public Deposit closeDeposit(DepositDto depositDto) {
+        Person depositHolder = personRepository.findById(depositDto.getClientId())
+                .orElseThrow(() -> new RuntimeException("Client not found"));
         Deposit depositDb = depositRepository.findById(depositDto.getId())
                 .orElseThrow(() -> new RuntimeException("Депозит не найден"));
 

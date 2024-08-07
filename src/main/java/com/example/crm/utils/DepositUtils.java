@@ -1,5 +1,6 @@
 package com.example.crm.utils;
 
+import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Currency;
 import com.example.crm.repository.DepositRepository;
@@ -42,11 +43,19 @@ public class DepositUtils {
         };
     }
 
-//    public Double calculateInterest(Deposit deposit) {
-//        LocalDateTime currentDate = LocalDateTime.now();
-//
-//        if (currentDate.isAfter(deposit.getEndDate())) {
-//
-//        }
-//    }
+    // Расчет сколько клиент получит со вклада
+    public Double calculateInterest(DepositDto depositDto) {
+        double amount = depositDto.getAmount();
+        double interestRate = depositDto.getInterestRate() / 100;
+        int termDays = depositDto.getDepositTermDays();
+
+        return (amount * interestRate * termDays) / 365;
+    }
+
+    public Double closeDepositEarly(DepositDto depositDto) {
+        LocalDateTime today = LocalDateTime.now();
+
+        // Вычисление оставшихся дней до закрытия депозита
+        long daysRemaining = ChronoUnit.DAYS.between(today, endDate);
+    }
 }

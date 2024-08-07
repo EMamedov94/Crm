@@ -1,7 +1,7 @@
 package com.example.crm.controllers;
 
 import com.example.crm.dto.DepositDto;
-import com.example.crm.service.DepositService;
+import com.example.crm.service.deposit.DepositService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
@@ -19,7 +19,7 @@ public class SchedulerConfig {
 
     @Scheduled(cron = "0 0 0 * * ?") // Выполнять каждый день в полночь
     public void closeExpiredDeposits() {
-        Date currentDate = new Date();
+        LocalDateTime currentDate = LocalDateTime.now();
         List<Deposit> expiredDeposits = depositRepository.findByEndDateBeforeAndStatus(currentDate, Status.ACTIVE);
 
         for (Deposit deposit : expiredDeposits) {

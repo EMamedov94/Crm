@@ -22,7 +22,7 @@ public class ValidationDepositImpl implements ValidationDeposit {
 
         List<String> errors = new ArrayList<>();
 
-        if (balance == null || balance >= clientBalance) {
+        if (balance == null || balance > clientBalance) {
             errors.add("Недостаточно средств");
         }
 

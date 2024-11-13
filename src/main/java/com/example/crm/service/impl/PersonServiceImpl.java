@@ -18,6 +18,7 @@ public class PersonServiceImpl implements PersonService {
     // Add new person
     @Override
     public Person addNewPerson(Person person) {
+        person.setBalance(0.0);
         return personRepository.save(person);
     }
 

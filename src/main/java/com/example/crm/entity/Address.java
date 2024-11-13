@@ -1,5 +1,6 @@
 package com.example.crm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +22,8 @@ public class Address {
     @Column(nullable = false)
     private String street;
 
-    @OneToOne
-    @JsonIgnore
+    @OneToOne()
+    @JoinColumn(name = "person_id")
+    @JsonBackReference
     private Person person;
 }

@@ -1,10 +1,10 @@
-package com.example.crm.service.impl;
+package com.example.crm.service.impl.auth;
 
 import com.example.crm.configuration.JwtService;
 import com.example.crm.entity.users.Member;
 import com.example.crm.repository.MemberRepository;
 import com.example.crm.enums.Role;
-import com.example.crm.service.AuthenticationService;
+import com.example.crm.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,9 +1,8 @@
-package com.example.crm.service.impl;
+package com.example.crm.service.impl.deposit;
 
-import com.example.crm.entity.Person;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.repository.PersonRepository;
-import com.example.crm.service.ValidationDeposit;
+import com.example.crm.service.deposit.ValidationDeposit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

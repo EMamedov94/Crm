@@ -1,4 +1,4 @@
-package com.example.crm.service;
+package com.example.crm.service.auth;
 
 import com.example.crm.entity.users.Member;
 

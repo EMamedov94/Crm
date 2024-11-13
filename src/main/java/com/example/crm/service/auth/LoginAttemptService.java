@@ -1,4 +1,4 @@
-package com.example.crm.service;
+package com.example.crm.service.auth;
 
 public interface LoginAttemptService {
     void loginSucceeded(String username);

@@ -1,10 +1,10 @@
-package com.example.crm.service.impl;
+package com.example.crm.service.impl.person;
 
 import com.example.crm.entity.Person;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.repository.PassportRepository;
 import com.example.crm.repository.PersonRepository;
-import com.example.crm.service.ValidationPerson;
+import com.example.crm.service.person.ValidationPerson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

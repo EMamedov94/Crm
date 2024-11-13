@@ -1,4 +1,4 @@
-package com.example.crm.service;
+package com.example.crm.service.deposit;
 
 import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.products.Deposit;

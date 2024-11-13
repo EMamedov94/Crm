@@ -1,8 +1,8 @@
-package com.example.crm.service.impl;
+package com.example.crm.service.impl.auth;
 
 import com.example.crm.entity.auth.LoginAttempt;
 import com.example.crm.repository.LoginAttemptRepository;
-import com.example.crm.service.LoginAttemptService;
+import com.example.crm.service.auth.LoginAttemptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

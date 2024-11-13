@@ -3,7 +3,7 @@ package com.example.crm.controllers;
 import com.example.crm.entity.users.Member;
 import com.example.crm.exception.InvalidPasswordException;
 import com.example.crm.exception.UserNotFoundException;
-import com.example.crm.service.AuthenticationService;
+import com.example.crm.service.auth.AuthenticationService;
 import com.example.crm.service.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

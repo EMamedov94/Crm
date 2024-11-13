@@ -1,9 +1,9 @@
-package com.example.crm.service.impl;
+package com.example.crm.service.impl.person;
 
 import com.example.crm.entity.Passport;
 import com.example.crm.entity.Person;
 import com.example.crm.repository.PersonRepository;
-import com.example.crm.service.PersonService;
+import com.example.crm.service.person.PersonService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;

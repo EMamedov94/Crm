@@ -5,7 +5,7 @@ import com.example.crm.exception.InvalidPasswordException;
 import com.example.crm.exception.UserNotFoundException;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.repository.MemberRepository;
-import com.example.crm.service.LoginAttemptService;
+import com.example.crm.service.auth.LoginAttemptService;
 import com.example.crm.service.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

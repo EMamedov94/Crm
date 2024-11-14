@@ -1,19 +1,15 @@
 package com.example.crm.service.impl.deposit;
 
+
 import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
 import com.example.crm.repository.DepositRepository;
 import com.example.crm.repository.PersonRepository;
-<<<<<<< HEAD:src/main/java/com/example/crm/service/impl/DepositServiceImpl.java
-import com.example.crm.service.DepositService;
-import com.example.crm.service.ValidationDeposit;
-import com.example.crm.utils.DateUtils;
-=======
 import com.example.crm.service.deposit.DepositService;
 import com.example.crm.service.deposit.ValidationDeposit;
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0:src/main/java/com/example/crm/service/impl/deposit/DepositServiceImpl.java
+import com.example.crm.utils.DateUtils;
 import com.example.crm.utils.DepositUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +24,13 @@ public class DepositServiceImpl implements DepositService {
     private final PersonRepository personRepository;
     private final ValidationDeposit validationDeposit;
     private final DepositUtils depositUtils;
-<<<<<<< HEAD:src/main/java/com/example/crm/service/impl/DepositServiceImpl.java
     private final DateUtils dateUtils;
-=======
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0:src/main/java/com/example/crm/service/impl/deposit/DepositServiceImpl.java
 
     // Открытие нового вклада
     @Override
     @Transactional
     public Deposit openNewDeposit(DepositDto depositDto) {
 
-<<<<<<< HEAD:src/main/java/com/example/crm/service/impl/DepositServiceImpl.java
         // Получить клиента и проверить наличие его средств
         Person depositHolder = getDepositHolderWithSufficientBalance(depositDto);
 
@@ -47,27 +39,9 @@ public class DepositServiceImpl implements DepositService {
 
         // Открытие депозита
         Deposit newDeposit = createNewDeposit(depositDto, depositHolder);
-=======
+
         // Проверить баланс клиента
         validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
-
-        // Определить дату начала и окончания вклада
-        LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = depositUtils.calculateEndDate(startDate, depositDto.getDepositTermDays());
-
-        // Создать новый вклад
-        Deposit newDeposit = Deposit.builder()
-                .amount(depositDto.getAmount())
-                .interestRate(depositDto.getInterestRate())
-                .currency(depositDto.getCurrency())
-                .depositNumber(depositUtils.generateDepositNumber(depositDto.getCurrency()))
-                .depositTermDays(depositDto.getDepositTermDays())
-                .status(Status.ACTIVE)
-                .startDate(startDate)
-                .endDate(endDate)
-                .depositHolder(depositHolder)
-                .build();
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0:src/main/java/com/example/crm/service/impl/deposit/DepositServiceImpl.java
 
         // Обновить баланс клиента
         depositHolder.setBalance(depositHolder.getBalance() - depositDto.getAmount());
@@ -79,13 +53,8 @@ public class DepositServiceImpl implements DepositService {
     // Закрытие вклада
     @Override
     public Deposit closeDeposit(DepositDto depositDto) {
-<<<<<<< HEAD:src/main/java/com/example/crm/service/impl/DepositServiceImpl.java
 
         // Поиск депозита в БД
-=======
-        Person depositHolder = personRepository.findById(depositDto.getClientId())
-                .orElseThrow(() -> new RuntimeException("Client not found"));
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0:src/main/java/com/example/crm/service/impl/deposit/DepositServiceImpl.java
         Deposit depositDb = depositRepository.findById(depositDto.getId())
                 .orElseThrow(() -> new RuntimeException("Депозит не найден"));
 
@@ -131,7 +100,7 @@ public class DepositServiceImpl implements DepositService {
                 .amount(depositDto.getAmount())
                 .interestRate(depositDto.getInterestRate())
                 .currency(depositDto.getCurrency())
-                .depositNumber(depositUtils.generateDepositNumber())
+                .depositNumber(depositUtils.generateDepositNumber(depositDto.getCurrency()))
                 .depositTermDays(depositDto.getDepositTermDays())
                 .status(Status.ACTIVE)
                 .startDate(startDate)

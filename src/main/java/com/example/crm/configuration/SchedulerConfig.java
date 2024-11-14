@@ -9,10 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
-<<<<<<< HEAD
-import java.util.Date;
-=======
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0
 import java.util.List;
 
 @Configuration

@@ -1,31 +1,11 @@
 package com.example.crm.utils;
 
-<<<<<<< HEAD
 import com.example.crm.entity.products.Deposit;
-=======
 import com.example.crm.dto.DepositDto;
-import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Currency;
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0
 import com.example.crm.repository.DepositRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-<<<<<<< HEAD
-@Component
-@RequiredArgsConstructor
-public class DepositUtils {
-    private final DepositRepository depositRepository;
-
-    public String generateDepositNumber() {
-        String lastDepositNumber = depositRepository.findTopByOrderByIdDesc()
-                .map(Deposit::getDepositNumber)
-                .orElse("P1");
-
-        int lastNumber = Integer.parseInt(lastDepositNumber.substring(1));
-
-        return  "P" + (lastNumber + 1);
-=======
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -69,13 +49,5 @@ public class DepositUtils {
         int termDays = depositDto.getDepositTermDays();
 
         return (amount * interestRate * termDays) / 365;
-    }
-
-    public Double closeDepositEarly(DepositDto depositDto) {
-        LocalDateTime today = LocalDateTime.now();
-
-        // Вычисление оставшихся дней до закрытия депозита
-        long daysRemaining = ChronoUnit.DAYS.between(today, endDate);
->>>>>>> 4987140bc5001d74c74d3ac138388ade3ab37ec0
     }
 }

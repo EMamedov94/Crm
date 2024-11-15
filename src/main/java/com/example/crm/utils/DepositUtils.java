@@ -1,9 +1,12 @@
 package com.example.crm.utils;
 
+import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.dto.DepositDto;
 import com.example.crm.enums.Currency;
 import com.example.crm.repository.DepositRepository;
+import com.example.crm.repository.PersonRepository;
+import com.example.crm.service.deposit.ValidationDeposit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
@@ -13,6 +16,8 @@ import java.time.LocalTime;
 @Component
 public class DepositUtils {
     private final DepositRepository depositRepository;
+    private final PersonRepository personRepository;
+    private final ValidationDeposit validationDeposit;
 
     // Определение даты окончания вклада
     public LocalDateTime calculateEndDate(LocalDateTime startDate, Integer termInDays) {
@@ -49,5 +54,18 @@ public class DepositUtils {
         int termDays = depositDto.getDepositTermDays();
 
         return (amount * interestRate * termDays) / 365;
+    }
+
+    // Пополнение средств у клиента
+    public void replenishmentBalance(Person depositHolder, double amount) {
+        depositHolder.setBalance(depositHolder.getBalance() + amount);
+
+        personRepository.save(depositHolder);
+    }
+
+    // Списание средств у клиента
+    public void deductBalance(Person depositHolder, double amount) {
+        depositHolder.setBalance(depositHolder.getBalance() - amount);
+        personRepository.save(depositHolder);
     }
 }

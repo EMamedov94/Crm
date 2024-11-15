@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body("Пользователь не найден");
+                .body(ex.getMessage());
     }
 
     // If password wrong (login)
@@ -51,6 +51,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidDepositStatusException.class)
+    public ResponseEntity<Object> handleInvalidDepositStatusException (InvalidDepositStatusException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DepositNotFoundException.class)
+    public ResponseEntity<Object> handleDepositNotFountException(DepositNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotEnoughBalanceException.class)
+    public ResponseEntity<Object> handleNotEnoughBalanceException(NotEnoughBalanceException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());
     }
 }

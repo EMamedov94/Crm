@@ -2,8 +2,10 @@ package com.example.crm.service.impl.person;
 
 import com.example.crm.entity.Passport;
 import com.example.crm.entity.Person;
+import com.example.crm.exception.UserNotFoundException;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.person.PersonService;
+import com.example.crm.utils.PersonSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
@@ -15,31 +17,32 @@ public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
 
-    // Add new person
+    // Добавление нового клиента
     @Override
     public Person addNewPerson(Person person) {
         person.setBalance(0.0);
         return personRepository.save(person);
     }
 
-    // Find person by Passport number
+    // Поиск клиента по номеру паспорта
     @Override
     @Transactional
-    public Person findPersonByPassportNumber(Passport passportNumber) {
-        Person personDb = personRepository.findByPassportPassportNumber(passportNumber.getPassportNumber());
-
-        if (personDb == null) {
-            throw new RuntimeException("Ничего не найдено");
-        }
-
-        Hibernate.initialize(personDb.getDeposits());
-
-        return personDb;
+    public Person findPersonByPassportNumber(String passportNumber) {
+        return findPersonOrThrow(passportNumber);
     }
 
-    // Find person by Phone number
+    // Поиск клиента по номеру телефона
     @Override
+    @Transactional
     public Person findPersonByPhoneNumber(String phoneNumber) {
-        return personRepository.findByPhoneNumber(phoneNumber);
+        return findPersonOrThrow(phoneNumber);
+    }
+
+    // Поиск клиента в бд по полученным данным и проверка на NULL
+    private Person findPersonOrThrow(String searchMethod) {
+        Person personDb = personRepository.findOne(PersonSpecification.bySearchValue(searchMethod))
+                .orElseThrow(UserNotFoundException::new);
+        Hibernate.initialize(personDb.getDeposits());
+        return personDb;
     }
 }

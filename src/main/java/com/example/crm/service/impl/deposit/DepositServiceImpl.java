@@ -5,6 +5,9 @@ import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
+import com.example.crm.exception.NotEnoughBalanceException;
+import com.example.crm.exception.UserNotFoundException;
+import com.example.crm.exception.ValidationException;
 import com.example.crm.repository.DepositRepository;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.deposit.DepositService;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,69 +30,42 @@ public class DepositServiceImpl implements DepositService {
     private final DepositUtils depositUtils;
     private final DateUtils dateUtils;
 
-    // Открытие нового вклада
+    // Открытие нового Депозита
     @Override
     @Transactional
     public Deposit openNewDeposit(DepositDto depositDto) {
 
-        // Получить клиента и проверить наличие его средств
-        Person depositHolder = getDepositHolderWithSufficientBalance(depositDto);
+        // Поиск клиента в бд
+        Person depositHolder = personRepository.findById(depositDto.getClientId())
+                .orElseThrow(UserNotFoundException::new);
 
-        // Списание ДС у клиента
-        deductBalance(depositHolder, depositDto.getAmount());
+        // Проверка баланса клиента
+        validationDeposit.validateBalance(depositDto.getAmount(), depositHolder.getBalance());
+
+        // Списание баланса
+        depositUtils.deductBalance(depositHolder, depositDto.getAmount());
 
         // Открытие депозита
         Deposit newDeposit = createNewDeposit(depositDto, depositHolder);
-
-        // Проверить баланс клиента
-        validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
-
-        // Обновить баланс клиента
-        depositHolder.setBalance(depositHolder.getBalance() - depositDto.getAmount());
-        personRepository.save(depositHolder);
 
         return depositRepository.save(newDeposit);
     }
 
     // Закрытие вклада
     @Override
+    @Transactional
     public Deposit closeDeposit(DepositDto depositDto) {
 
-        // Поиск депозита в БД
-        Deposit depositDb = depositRepository.findById(depositDto.getId())
-                .orElseThrow(() -> new RuntimeException("Депозит не найден"));
-
-        // Получение клиента из БД и проверка его баланса
-        Person depositHolder = getDepositHolderWithSufficientBalance(depositDto);
-
-        // Пополение баланса клиента
-        replenishmentBalance(depositHolder, depositDto.getAmount());
+        // Поиск депозита в БД и проверка его статуса
+        Deposit depositDb = validationDeposit.findDepositAndValidateStatus(depositDto);
 
         // Закрытие депозита
         depositDb.setStatus(Status.CLOSED);
 
+        // Пополение баланса клиента
+        depositUtils.replenishmentBalance(depositDb.getDepositHolder(), depositDb.getAmount());
+
         return depositRepository.save(depositDb);
-    }
-
-    // Получение клиента и проверки его баланса
-    private Person getDepositHolderWithSufficientBalance(DepositDto depositDto) {
-        Person depositHolder = personRepository.findById(depositDto.getClientId())
-                .orElseThrow(() -> new RuntimeException("Client not found"));
-        validationDeposit.validateBalance(depositHolder.getId(), depositDto.getAmount());
-        return depositHolder;
-    }
-
-    // Пополнение средств у клиента
-    private void replenishmentBalance(Person depositHolder, double amount) {
-        depositHolder.setBalance(depositHolder.getBalance() + amount);
-
-        personRepository.save(depositHolder);
-    }
-
-    // Списание средств у клиента
-    private void deductBalance(Person depositHolder, double amount) {
-        depositHolder.setBalance(depositHolder.getBalance() - amount);
-        personRepository.save(depositHolder);
     }
 
     // Создание нового депозита

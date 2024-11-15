@@ -36,7 +36,7 @@ public class ValidationServiceImpl implements ValidationService {
 
         if (userDb == null) {
             loginAttemptService.loginFailed(username);
-            throw new UserNotFoundException("Пользователь не найден");
+            throw new UserNotFoundException();
         }
         if (passwordEncoder.matches(password, userDb.getPassword())) {
             loginAttemptService.loginSucceeded(username);

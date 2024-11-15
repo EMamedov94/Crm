@@ -1,7 +1,6 @@
 package com.example.crm.controllers;
 
 
-import com.example.crm.entity.Passport;
 import com.example.crm.entity.Person;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.service.person.PersonService;
@@ -42,9 +41,9 @@ public class PersonController {
     }
 
     // Find person by phone number
-    @GetMapping("/findPersonByPhoneNumber/{phoneNumber}")
+    @GetMapping("/findPersonByPhoneNumber")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPhoneNumber(@PathVariable String phoneNumber,
+    public ResponseEntity<Object> getPersonByPhoneNumber(@RequestParam String phoneNumber,
                                                          @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -54,7 +53,7 @@ public class PersonController {
     // Find person by passport number
     @GetMapping("/findPersonByPassportNumber")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPassportNumber(@RequestBody Passport passportNumber,
+    public ResponseEntity<Object> getPersonByPassportNumber(@RequestBody String passportNumber,
                                                             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity
                 .status(HttpStatus.OK)

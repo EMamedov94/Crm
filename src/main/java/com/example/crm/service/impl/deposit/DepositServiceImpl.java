@@ -5,6 +5,7 @@ import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
+import com.example.crm.exception.DepositAlreadyClosedException;
 import com.example.crm.exception.NotEnoughBalanceException;
 import com.example.crm.exception.UserNotFoundException;
 import com.example.crm.exception.ValidationException;
@@ -59,20 +60,27 @@ public class DepositServiceImpl implements DepositService {
         // Поиск депозита в БД и проверка его статуса
         Deposit depositDb = validationDeposit.findDepositAndValidateStatus(depositDto);
 
+        double interestAmount = dateUtils.isEarlyClosure(depositDb) ?
+                depositUtils.calculateEarlyClosureInterest(depositDb) :
+                depositUtils.calculateInterest(depositDto);
+
         // Закрытие депозита
         depositDb.setStatus(Status.CLOSED);
 
         // Пополение баланса клиента
-        depositUtils.replenishmentBalance(depositDb.getDepositHolder(), depositDb.getAmount());
+        depositUtils.replenishmentBalance(depositDb.getDepositHolder(), depositDb.getAmount() + interestAmount);
 
         return depositRepository.save(depositDb);
     }
 
+    // Расчет и отображение суммы потерянных % если депозит закрывается раньше времени
     @Override
     public Double calculateClosureAmount(DepositDto depositDto) {
 
         // Поиск депозита в БД и проверка его статуса
         Deposit depositDb = validationDeposit.findDepositAndValidateStatus(depositDto);
+
+
 
         return dateUtils.calculateLostAmount(depositDb);
     }

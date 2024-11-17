@@ -22,9 +22,16 @@ public class DateUtils {
     }
 
     // Получение дней сколько пролежал депозит
-    private Integer calculateDepositDays(LocalDateTime startDate) {
+    public Integer calculateDepositDays(LocalDateTime startDate) {
         long days = Duration.between(startDate, LocalDateTime.now()).toDays();
         return (int) days;
+    }
+
+    // Метод для проверки досрочного закрытия депозита
+    public boolean isEarlyClosure(Deposit deposit) {
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime endDate = deposit.getEndDate();
+        return currentDate.isBefore(endDate);  // если текущая дата до даты окончания, то это досрочное закрытие
     }
 
     // Получение суммы при досрочном закрытии депозита
@@ -37,18 +44,5 @@ public class DateUtils {
                 .divide(new BigDecimal(365), 2, RoundingMode.HALF_UP);
 
         return result.doubleValue();
-    }
-
-    // Расчет депозита при досрочном закрытии по ставке 0.1%
-    public Double calculateInterest(Deposit deposit) {
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime endDate = deposit.getEndDate();
-        double sum = 0.0;
-
-        if (currentDate.isBefore(endDate)) {
-            sum = deposit.getAmount() * 0.001 * calculateDepositDays(deposit.getStartDate()) / 365;
-        }
-
-        return sum;
     }
 }

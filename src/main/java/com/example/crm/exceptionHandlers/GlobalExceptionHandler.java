@@ -54,13 +54,6 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler(InvalidDepositStatusException.class)
-    public ResponseEntity<Object> handleInvalidDepositStatusException (InvalidDepositStatusException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
-    }
-
     @ExceptionHandler(DepositNotFoundException.class)
     public ResponseEntity<Object> handleDepositNotFountException(DepositNotFoundException ex) {
         return ResponseEntity
@@ -72,6 +65,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleNotEnoughBalanceException(NotEnoughBalanceException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DepositAlreadyClosedException.class)
+    public ResponseEntity<Object> handleDepositAlreadyClosedException(DepositAlreadyClosedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
 }

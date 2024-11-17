@@ -21,9 +21,7 @@ public class PersonController {
 
     // Add new person
     @PostMapping("/addNewPerson")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> addNewPerson(@RequestBody Person person,
-                                               @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Object> addNewPerson(@RequestBody Person person) {
         try {
             if (validationPerson.validateNewPerson(person)) {
                 return ResponseEntity
@@ -42,9 +40,7 @@ public class PersonController {
 
     // Find person by phone number
     @GetMapping("/findPersonByPhoneNumber")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPhoneNumber(@RequestParam String phoneNumber,
-                                                         @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Object> getPersonByPhoneNumber(@RequestParam String phoneNumber) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(personService.findPersonByPhoneNumber(phoneNumber));
@@ -52,12 +48,9 @@ public class PersonController {
 
     // Find person by passport number
     @GetMapping("/findPersonByPassportNumber")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPassportNumber(@RequestParam String passportNumber,
-                                                            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Object> getPersonByPassportNumber(@RequestParam String passportNumber) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(personService.findPersonByPassportNumber(passportNumber));
     }
-
 }

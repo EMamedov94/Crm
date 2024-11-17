@@ -3,11 +3,10 @@ package com.example.crm.service.impl.deposit;
 import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
+import com.example.crm.exception.DepositAlreadyClosedException;
 import com.example.crm.exception.DepositNotFoundException;
-import com.example.crm.exception.InvalidDepositStatusException;
 import com.example.crm.exception.ValidationException;
 import com.example.crm.repository.DepositRepository;
-import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.deposit.ValidationDeposit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class ValidationDepositImpl implements ValidationDeposit {
                 .orElseThrow(DepositNotFoundException::new);
 
         if (depositDb.getStatus() == Status.CLOSED) {
-            throw new InvalidDepositStatusException();
+            throw new DepositAlreadyClosedException();
         }
         return depositDb;
     }

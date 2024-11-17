@@ -6,24 +6,17 @@ import com.example.crm.dto.DepositDto;
 import com.example.crm.enums.Currency;
 import com.example.crm.repository.DepositRepository;
 import com.example.crm.repository.PersonRepository;
-import com.example.crm.service.deposit.ValidationDeposit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @RequiredArgsConstructor
 @Component
 public class DepositUtils {
     private final DepositRepository depositRepository;
     private final PersonRepository personRepository;
-
-    // Определение даты окончания вклада
-    public LocalDateTime calculateEndDate(LocalDateTime startDate, Integer termInDays) {
-        LocalDateTime endDateTime = startDate.plusDays(termInDays);
-        endDateTime.with(LocalTime.MIDNIGHT);
-        return endDateTime;
-    }
+    private final DateUtils dateUtils;
 
     // Генерация номера вклада
     public String generateDepositNumber(Currency currency) {
@@ -47,7 +40,7 @@ public class DepositUtils {
     }
 
     // Расчет сколько клиент получит со вклада
-    private Double calculateInterest(DepositDto depositDto) {
+    public Double calculateInterest(DepositDto depositDto) {
         double amount = depositDto.getAmount();
         double interestRate = depositDto.getInterestRate() / 100;
         int termDays = depositDto.getDepositTermDays();
@@ -66,5 +59,21 @@ public class DepositUtils {
     public void deductBalance(Person depositHolder, double amount) {
         depositHolder.setBalance(depositHolder.getBalance() - amount);
         personRepository.save(depositHolder);
+    }
+
+    // Расчет депозита при досрочном закрытии по ставке 0.1%
+    public Double calculateEarlyClosureInterest(Deposit deposit) {
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime endDate = deposit.getEndDate();
+        double sum = 0.0;
+
+        // Ставка 0.01% для досрочного закрытия
+        double earlyInterestRate = 0.0001;
+
+        if (currentDate.isBefore(endDate)) {
+            sum = deposit.getAmount() * earlyInterestRate * dateUtils.calculateDepositDays(deposit.getStartDate()) / 365;
+        }
+
+        return sum;
     }
 }

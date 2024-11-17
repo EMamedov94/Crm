@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                                 "/addNewPerson/",
                                 "findPersonByPassportNumber/"
                         ).hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionAuthenticationStrategy ->

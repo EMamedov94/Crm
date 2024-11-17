@@ -68,6 +68,15 @@ public class DepositServiceImpl implements DepositService {
         return depositRepository.save(depositDb);
     }
 
+    @Override
+    public Double calculateClosureAmount(DepositDto depositDto) {
+
+        // Поиск депозита в БД и проверка его статуса
+        Deposit depositDb = validationDeposit.findDepositAndValidateStatus(depositDto);
+
+        return dateUtils.calculateLostAmount(depositDb);
+    }
+
     // Создание нового депозита
     private Deposit createNewDeposit(DepositDto depositDto, Person depositHolder) {
         LocalDateTime startDate = LocalDateTime.now();

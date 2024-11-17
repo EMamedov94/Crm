@@ -17,4 +17,5 @@ public class DepositDto {
     private Integer depositTermDays;
     private Long clientId;
     private LocalDateTime endDate;
+    private LocalDateTime startDate;
 }

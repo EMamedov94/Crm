@@ -17,7 +17,6 @@ import java.time.LocalTime;
 public class DepositUtils {
     private final DepositRepository depositRepository;
     private final PersonRepository personRepository;
-    private final ValidationDeposit validationDeposit;
 
     // Определение даты окончания вклада
     public LocalDateTime calculateEndDate(LocalDateTime startDate, Integer termInDays) {
@@ -48,7 +47,7 @@ public class DepositUtils {
     }
 
     // Расчет сколько клиент получит со вклада
-    public Double calculateInterest(DepositDto depositDto) {
+    private Double calculateInterest(DepositDto depositDto) {
         double amount = depositDto.getAmount();
         double interestRate = depositDto.getInterestRate() / 100;
         int termDays = depositDto.getDepositTermDays();

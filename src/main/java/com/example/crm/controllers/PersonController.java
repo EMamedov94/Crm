@@ -53,7 +53,7 @@ public class PersonController {
     // Find person by passport number
     @GetMapping("/findPersonByPassportNumber")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getPersonByPassportNumber(@RequestBody String passportNumber,
+    public ResponseEntity<Object> getPersonByPassportNumber(@RequestParam String passportNumber,
                                                             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity
                 .status(HttpStatus.OK)

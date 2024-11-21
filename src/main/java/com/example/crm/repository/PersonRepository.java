@@ -9,4 +9,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface PersonRepository extends JpaRepository<Person, Long>, JpaSpecificationExecutor<Person> {
     boolean existsByPhoneNumber(String phoneNumber);
+    boolean existsById(Long personId);
 }

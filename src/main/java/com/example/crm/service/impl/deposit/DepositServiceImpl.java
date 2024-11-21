@@ -5,10 +5,7 @@ import com.example.crm.dto.DepositDto;
 import com.example.crm.entity.Person;
 import com.example.crm.entity.products.Deposit;
 import com.example.crm.enums.Status;
-import com.example.crm.exception.DepositAlreadyClosedException;
-import com.example.crm.exception.NotEnoughBalanceException;
-import com.example.crm.exception.UserNotFoundException;
-import com.example.crm.exception.ValidationException;
+import com.example.crm.exception.*;
 import com.example.crm.repository.DepositRepository;
 import com.example.crm.repository.PersonRepository;
 import com.example.crm.service.deposit.DepositService;
@@ -83,6 +80,12 @@ public class DepositServiceImpl implements DepositService {
 
 
         return dateUtils.calculateLostAmount(depositDb);
+    }
+
+    // Поиск депозитов по id клиента
+    @Override
+    public List<Deposit> findDepositsByClientId(Long clientId) {
+        return validationDeposit.validateClientAndDeposits(clientId);
     }
 
     // Создание нового депозита

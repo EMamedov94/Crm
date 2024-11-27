@@ -1,10 +1,8 @@
 package com.example.crm.controllers;
 
 import com.example.crm.entity.users.Member;
-import com.example.crm.exception.InvalidPasswordException;
-import com.example.crm.exception.UserNotFoundException;
 import com.example.crm.service.auth.AuthenticationService;
-import com.example.crm.service.ValidationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,51 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
-    private final ValidationService validationService;
 
-    // Registration new user
+    // Регистрация нового пользователя
     @PostMapping("/registrationNewMember")
-    public ResponseEntity<Object> registrationNewMember(@RequestBody Member member) {
-        try {
-            if (validationService.validateNewMember(member)) {
-                return ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(authenticationService.registrationNewMember(member));
-            }
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<Object> registrationNewMember(@RequestBody @Valid Member member) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Произошло что то неизвестное :(");
+                .status(HttpStatus.CREATED)
+                .body(authenticationService.registrationNewMember(member));
     }
 
-    // Login user
+    // Вход пользователя
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Member member) {
-        try {
-            if (validationService.validateCredentials(member)) {
-                return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(authenticationService.loginMember(member));
-            }
-        } catch (UserNotFoundException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        } catch (InvalidPasswordException e) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.TOO_MANY_REQUESTS)
-                    .body("Слишком много попыток входа, попробуйте позже");
-        }
+    public ResponseEntity<Object> login(@RequestBody @Valid Member member) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Произошло что то неизвестное :(");
+                .status(HttpStatus.OK)
+                .body(authenticationService.loginMember(member));
     }
 }

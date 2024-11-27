@@ -3,11 +3,28 @@ package com.example.crm.exceptionHandlers;
 import com.example.crm.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.validation.FieldError;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errors);
+    }
 
     // If user not found (login)
     @ExceptionHandler(UserNotFoundException.class)
@@ -18,11 +35,11 @@ public class GlobalExceptionHandler {
     }
 
     // If password wrong (login)
-    @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<Object> handleInvalidPasswordException(InvalidPasswordException ex) {
+    @ExceptionHandler(InvalidLoginOrPasswordException.class)
+    public ResponseEntity<Object> handleInvalidPasswordException(InvalidLoginOrPasswordException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body("Неверный пароль");
+                .body(ex.getMessage());
     }
 
     // If many requests
@@ -34,10 +51,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Object> handleUserAlreadyExistsException() {
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body("Пользователь с таким логином уже существует");
+                .body(ex.getMessage());
     }
 
     @ExceptionHandler(ValidationException.class)
